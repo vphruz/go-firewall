@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
+	//"log/syslog"
 )
 
 // the func accepts 2 variables : rules and ip addresses(incoming network connections)
@@ -21,10 +23,10 @@ func filterconection(conn net.Conn, rules []string) {
 	}
 
 	if allowed {
-		fmt.Printf("allowed connection from %s\n", remoteAddr)
+		log.Printf("allowed connection from %s\n", remoteAddr)
 	} else {
 		conn.Close()
-		fmt.Printf("Blocked connection from %s\n", remoteAddr)
+		log.Printf("Blocked connection from %s\n", remoteAddr)
 	}
 }
 
@@ -32,8 +34,16 @@ func filterconection(conn net.Conn, rules []string) {
 // starts the listening on the port and calls the filter connection for each incoming connection
 
 func main() {
+	log_file := "/Users/Rex/Documents/vphruz/go-firewall/errlog"
+	logFile, err := os.OpenFile(log_file, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
 	port := "8080"
-	rules := []string{"192.168.0.1", "192.168.136.10", "192.168.136.10"}
+	rules := []string{"127.0.0.1"}
 
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
