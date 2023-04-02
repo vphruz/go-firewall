@@ -34,7 +34,7 @@ func filterconection(conn net.Conn, rules []string) {
 // starts the listening on the port and calls the filter connection for each incoming connection
 
 func main() {
-	log_file := "/Users/Rex/Documents/vphruz/go-firewall/errlog"
+	log_file := "./errlog"
 	logFile, err := os.OpenFile(log_file, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
 	if err != nil {
 		log.Panic(err)
