@@ -33,7 +33,7 @@ func filterconection(conn net.Conn, rules []string) {
 
 func main() {
 	port := "8080"
-	rules := []string{"192.168.0.1", "192.168.136.10", "192.168.136.10"}
+	rules := []string{"127.0.0.1"}
 
 	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
