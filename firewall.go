@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"log"
 	"net"
@@ -33,6 +34,19 @@ func filterconection(conn net.Conn, rules []string) {
 // starts the listening on the port and calls the filter connection for each incoming connection
 
 func main() {
+	file, err := os.Open("rules.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
 	// log_file defines the path for the log file. the file is created if it does not exist
 	log_file := "./errlog"
 	logFile, err := os.OpenFile(log_file, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0644)
